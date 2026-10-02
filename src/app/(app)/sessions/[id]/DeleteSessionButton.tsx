@@ -12,7 +12,9 @@ export default function DeleteSessionButton({ sessionId }: { sessionId: string }
   async function handleDelete() {
     setLoading(true)
     const supabase = createClient()
+    // Supprimer d'abord les réponses liées
     await supabase.from('session_responses').delete().eq('session_id', sessionId)
+    // Puis la session
     const { error } = await supabase.from('sessions').delete().eq('id', sessionId)
     if (error) {
       alert('Erreur lors de la suppression : ' + error.message)
