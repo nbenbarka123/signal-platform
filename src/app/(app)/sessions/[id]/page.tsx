@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import SessionInterview from '@/components/sessions/SessionInterview'
+import DeleteSessionButton from './DeleteSessionButton'
 import { BLOC_LABELS } from '@/types'
 import Link from 'next/link'
 import { format } from 'date-fns'
@@ -65,14 +66,12 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
           </div>
           <div className="flex items-center gap-3">
             <SessionStatusSelect sessionId={id} currentStatus={session.statut} />
-            {responses && responses.length > 0 && (
-              <Link
-                href={`/sessions/${id}/process`}
-                className="bg-[#c9a84c] hover:bg-[#b8973b] text-[#111110] px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              >
-                Analyser →
-              </Link>
-            )}
+            <Link
+              href={`/sessions/${id}/process`}
+              className="bg-[#c9a84c] hover:bg-[#b8973b] text-[#111110] px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            >
+              Analyser →
+            </Link>
           </div>
         </div>
       </div>
@@ -84,6 +83,9 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
           questionsByBloc={questionsByBloc}
           responsesMap={responsesMap}
         />
+        <div className="mt-12 pt-6 border-t border-[#e8e7e4]">
+          <DeleteSessionButton sessionId={id} />
+        </div>
       </div>
     </div>
   )
