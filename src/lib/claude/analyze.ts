@@ -56,66 +56,15 @@ ${r.notes_consultant ? `Notes consultant : ${r.notes_consultant}` : ''}
 Signal attendu : ${r.question.signal_attendu ?? 'Non défini'}
     `).join('\n---\n')
 
-  const prompt = `Tu es un expert en transformation digitale et déploiement d'agents IA en entreprise, associé chez SIGNAL by Djin.
+  const prompt = `Tu es expert en déploiement d'agents IA en entreprise, associé chez SIGNAL by Djin.
+Session CEO de ${companyName} (${sessionDate}).
 
-Tu viens de conduire une session de shadowing de 2-3 heures avec le CEO de ${companyName} (${sessionDate}).
-
-Voici les réponses recueillies au cours de l'entretien :
-
+Réponses recueillies :
 ${context}
 
-Produis une analyse complète en JSON avec la structure exacte suivante. Chaque agent proposé DOIT être tracé jusqu'à la réponse CEO qui l'a générée.
+Réponds UNIQUEMENT avec un JSON valide, sans markdown, sans explication. Sois concis dans chaque champ (1-2 phrases max par champ texte).
 
-Réponds UNIQUEMENT avec un JSON valide, sans markdown, sans explication.
-
-{
-  "signals": [
-    {
-      "response_id": "ID_DE_LA_REPONSE",
-      "session_id": "SESSION_ID_PLACEHOLDER",
-      "signal_deduit": "Ce que la réponse révèle comme problème ou opportunité",
-      "agent_propose": "Nom de l'agent IA proposé",
-      "agent_type": "agent_synthese|agent_decision|agent_veille|agent_communication|agent_suivi_projet|agent_analyse|agent_connaissance|garde_fou|autre",
-      "directeur_cible": "Direction concernée",
-      "priorite": "haute|moyenne|faible",
-      "justification": "Lien explicite entre la réponse CEO et cet agent"
-    }
-  ],
-  "compte_rendu": {
-    "titre": "Compte rendu session CEO — ${companyName}",
-    "date": "${sessionDate}",
-    "entreprise": "${companyName}",
-    "synthese_dirigeant": "Portrait du CEO en 3-4 phrases : son style, ses priorités, son rapport à l'IA",
-    "points_cles": ["Point clé 1", "Point clé 2", "Point clé 3"],
-    "zones_protegees": ["Zone que l'IA ne doit pas toucher 1"],
-    "contrainte_donnees": "Résumé de la politique données de l'entreprise",
-    "prochaines_etapes": ["Étape 1", "Étape 2"]
-  },
-  "recommandations": {
-    "agents": [
-      {
-        "nom": "Nom de l'agent",
-        "type": "Type d'agent",
-        "priorite": "haute|moyenne|faible",
-        "probleme_resolu": "Le problème concret que cet agent résout",
-        "directeur_cible": "Direction à impliquer",
-        "justification": "Basé sur la réponse du CEO à [question_id] : ..."
-      }
-    ],
-    "synthese": "Synthèse des recommandations en 2-3 phrases"
-  },
-  "brief_table_ronde": {
-    "objectif": "Ce que la table ronde doit accomplir",
-    "participants_recommandes": [
-      {"direction": "DRH", "pourquoi": "Raison basée sur les réponses CEO"}
-    ],
-    "questions_a_poser": [
-      {"direction": "DAF", "question": "Question à poser au DAF lors de la table ronde"}
-    ],
-    "agents_a_presenter": ["Agent 1 à présenter"],
-    "points_attention": ["Résistance potentielle identifiée"]
-  }
-}`
+{"signals":[{"response_id":"ID","session_id":"SESSION_ID_PLACEHOLDER","signal_deduit":"problème/opportunité identifié","agent_propose":"nom agent","agent_type":"agent_synthese|agent_decision|agent_veille|agent_communication|agent_suivi_projet|agent_analyse|agent_connaissance|garde_fou|autre","directeur_cible":"direction","priorite":"haute|moyenne|faible","justification":"lien réponse CEO → agent"}],"compte_rendu":{"titre":"Session CEO — ${companyName}","date":"${sessionDate}","entreprise":"${companyName}","synthese_dirigeant":"Portrait CEO en 2 phrases","points_cles":["clé 1","clé 2","clé 3"],"zones_protegees":["zone 1"],"contrainte_donnees":"politique données résumée","prochaines_etapes":["étape 1","étape 2"]},"recommandations":{"agents":[{"nom":"nom agent","type":"type","priorite":"haute|moyenne|faible","probleme_resolu":"problème résolu","directeur_cible":"direction","justification":"basé sur [question_id]"}],"synthese":"synthèse en 1-2 phrases"},"brief_table_ronde":{"objectif":"objectif table ronde","participants_recommandes":[{"direction":"DRH","pourquoi":"raison"}],"questions_a_poser":[{"direction":"DAF","question":"question"}],"agents_a_presenter":["agent 1"],"points_attention":["résistance potentielle"]}}`
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
