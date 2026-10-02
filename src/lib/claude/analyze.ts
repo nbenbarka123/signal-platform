@@ -56,19 +56,18 @@ ${r.notes_consultant ? `Notes consultant : ${r.notes_consultant}` : ''}
 Signal attendu : ${r.question.signal_attendu ?? 'Non défini'}
     `).join('\n---\n')
 
-  const prompt = `Tu es expert en déploiement d'agents IA en entreprise, associé chez SIGNAL by Djin.
-Session CEO de ${companyName} (${sessionDate}).
+  const prompt = `Expert IA chez SIGNAL by Djin. Session CEO ${companyName} (${sessionDate}).
 
-Réponses recueillies :
+Réponses :
 ${context}
 
-Réponds UNIQUEMENT avec un JSON valide, sans markdown, sans explication. Sois concis dans chaque champ (1-2 phrases max par champ texte).
+JSON valide uniquement, sans markdown. Maximum 3 signaux, 3 agents, phrases courtes.
 
-{"signals":[{"response_id":"ID","session_id":"SESSION_ID_PLACEHOLDER","signal_deduit":"problème/opportunité identifié","agent_propose":"nom agent","agent_type":"agent_synthese|agent_decision|agent_veille|agent_communication|agent_suivi_projet|agent_analyse|agent_connaissance|garde_fou|autre","directeur_cible":"direction","priorite":"haute|moyenne|faible","justification":"lien réponse CEO → agent"}],"compte_rendu":{"titre":"Session CEO — ${companyName}","date":"${sessionDate}","entreprise":"${companyName}","synthese_dirigeant":"Portrait CEO en 2 phrases","points_cles":["clé 1","clé 2","clé 3"],"zones_protegees":["zone 1"],"contrainte_donnees":"politique données résumée","prochaines_etapes":["étape 1","étape 2"]},"recommandations":{"agents":[{"nom":"nom agent","type":"type","priorite":"haute|moyenne|faible","probleme_resolu":"problème résolu","directeur_cible":"direction","justification":"basé sur [question_id]"}],"synthese":"synthèse en 1-2 phrases"},"brief_table_ronde":{"objectif":"objectif table ronde","participants_recommandes":[{"direction":"DRH","pourquoi":"raison"}],"questions_a_poser":[{"direction":"DAF","question":"question"}],"agents_a_presenter":["agent 1"],"points_attention":["résistance potentielle"]}}`
+{"signals":[{"response_id":"ID","session_id":"SESSION_ID_PLACEHOLDER","signal_deduit":"problème court","agent_propose":"nom","agent_type":"agent_synthese","directeur_cible":"DG","priorite":"haute","justification":"lien court"}],"compte_rendu":{"titre":"Session ${companyName}","date":"${sessionDate}","entreprise":"${companyName}","synthese_dirigeant":"1 phrase","points_cles":["clé 1","clé 2"],"zones_protegees":["zone 1"],"contrainte_donnees":"1 phrase","prochaines_etapes":["étape 1"]},"recommandations":{"agents":[{"nom":"nom","type":"type","priorite":"haute","probleme_resolu":"1 phrase","directeur_cible":"direction","justification":"1 phrase"}],"synthese":"1 phrase"},"brief_table_ronde":{"objectif":"1 phrase","participants_recommandes":[{"direction":"DRH","pourquoi":"1 phrase"}],"questions_a_poser":[{"direction":"DAF","question":"question"}],"agents_a_presenter":["agent 1"],"points_attention":["point 1"]}}`
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 8000,
+    max_tokens: 2000,
     messages: [{ role: 'user', content: prompt }],
   })
 
