@@ -124,5 +124,7 @@ Réponds UNIQUEMENT avec un JSON valide, sans markdown, sans explication.
   })
 
   const text = response.content[0].type === 'text' ? response.content[0].text : ''
-  return JSON.parse(text) as AnalysisResult
+  // Strip markdown code blocks if present (```json ... ```)
+  const clean = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
+  return JSON.parse(clean) as AnalysisResult
 }
