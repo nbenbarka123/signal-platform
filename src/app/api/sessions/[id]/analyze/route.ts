@@ -38,9 +38,9 @@ export async function POST(
 
   const filledResponses = responses.filter(r => r.reponse_verbatim?.trim())
 
-  if (filledResponses.length < 3) {
+  if (filledResponses.length < 1) {
     return NextResponse.json(
-      { error: 'Minimum 3 réponses requises pour l\'analyse' },
+      { error: 'Aucune réponse à analyser' },
       { status: 400 }
     )
   }
